@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Network of Knowledge
 
-## Getting Started
+This project is a Next.js application designed to visualize connections between Wikipedia articles as a network graph.
 
-First, run the development server:
+## Technical Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Stack
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Framework:** Next.js 16 (App Router)
+- **Language:** TypeScript
+- **Visualization:** Cytoscape.js
+- **Styling:** Tailwind CSS (v4)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Core Functionality
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Data Fetching:**
+  - Connects to the Wikipedia API (`en.wikipedia.org/w/api.php`) to retrieve article metadata.
+  - Implements server-side fetching with Next.js caching strategies (1-hour revalidation for links, 24-hour for categories).
+  - Filters for main namespace articles (Namespace 0) and excludes hidden categories.
+- **Visualization:**
+  - Renders a force-directed graph using Cytoscape.js (`cose` layout).
+  - Displays a root node (currently hardcoded as "Linux") and its outgoing links as connected nodes.
+  - Limits initial visualization to 50 nodes for performance.
 
-## Learn More
+### Project Structure
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `app/lib/wikipedia.ts`: Handles API interaction, parameter construction, and response parsing.
+- `app/components/NetworkGraph.tsx`: Client-side component wrapping Cytoscape.js for graph rendering.
+- `app/page.tsx`: Server component that orchestrates data fetching and passes graph elements to the client.
